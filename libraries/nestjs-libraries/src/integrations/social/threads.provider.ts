@@ -30,7 +30,7 @@ export class ThreadsProvider extends SocialAbstract implements SocialProvider {
     'threads_manage_insights',
     // 'threads_profile_discovery',
   ];
-  override maxConcurrentJob = 2; // Threads has moderate rate limits
+  override maxConcurrentJob = 20; // Threads limits are per profile
   refreshCron = true;
 
   editor = 'normal' as const;
@@ -193,7 +193,9 @@ export class ThreadsProvider extends SocialAbstract implements SocialProvider {
         this.identifier,
         JSON.stringify({ status, error_message }),
         '{}',
-        error_message || 'Threads could not process the media'
+        error_message && error_message !== 'UNKNOWN'
+          ? error_message
+          : 'Threads could not process the media, please check the media format and try again'
       );
     }
 
@@ -875,8 +877,11 @@ export class ThreadsProvider extends SocialAbstract implements SocialProvider {
       }
 
       return result;
-    } catch (err) {
-      console.error('Error fetching Threads post analytics:', err);
+    } catch (err: any) {
+      console.error(
+        'Error fetching Threads post analytics:',
+        err?.cause?.code || err?.message || err
+      );
       return [];
     }
   }

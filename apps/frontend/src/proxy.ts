@@ -48,6 +48,7 @@ export async function proxy(request: NextRequest) {
     nextUrl.pathname.startsWith('/p/') ||
     nextUrl.pathname.startsWith('/provider/') ||
     nextUrl.pathname.startsWith('/icons/') ||
+<<<<<<< HEAD
     nextUrl.pathname === '/privacy' ||
     nextUrl.pathname === '/contact'
   ) {
@@ -60,6 +61,11 @@ export async function proxy(request: NextRequest) {
     !authCookie &&
     !nextUrl.searchParams.get('org') &&
     !request.cookies.get('org')
+=======
+    // the consent screen of MCP / OAuth clients handles signed-out visitors
+    // itself (sign in and come back, or connect a self-hosted instance)
+    nextUrl.pathname.startsWith('/oauth/authorize')
+>>>>>>> upstream/main
   ) {
     return topResponse;
   }

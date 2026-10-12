@@ -1,6 +1,7 @@
-import { ThirdPartyComponent } from '@gitroom/frontend/components/third-parties/third-party.component';
+import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
+<<<<<<< HEAD
 import { Metadata } from 'next';
 import { isGeneralServerSide } from '@gitroom/helpers/utils/is.general.server.side';
 export const metadata: Metadata = {
@@ -11,6 +12,9 @@ export const metadata: Metadata = {
   }`,
   description: '',
 };
+=======
+
+>>>>>>> upstream/main
 export default async function Index() {
-  return <ThirdPartyComponent />;
+  return redirect('/settings?tab=integrations');
 }

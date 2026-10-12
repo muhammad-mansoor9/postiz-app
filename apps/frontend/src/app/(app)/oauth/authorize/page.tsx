@@ -1,10 +1,9 @@
-'use client';
+import { OAuthAuthorize } from '@gitroom/frontend/components/oauth/authorize.component';
+import { cookies } from 'next/headers';
 
-import { useCallback, useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
-import { useFetch } from '@gitroom/helpers/utils/custom.fetch';
-import { Logo } from '@gitroom/frontend/components/new-layout/logo';
+export const dynamic = 'force-dynamic';
 
+<<<<<<< HEAD
 export default function OAuthAuthorizePage() {
   const searchParams = useSearchParams();
   const fetch = useFetch();
@@ -218,4 +217,10 @@ export default function OAuthAuthorizePage() {
       </div>
     </div>
   );
+=======
+// signed-out visitors get the page too (sign in, or use self-hosted)
+export default async function OAuthAuthorizePage() {
+  const get = (await cookies()).get('auth');
+  return <OAuthAuthorize logged={!!get?.name} />;
+>>>>>>> upstream/main
 }

@@ -11,6 +11,7 @@ import { timer } from '@gitroom/helpers/utils/timer';
 import dayjs from 'dayjs';
 import {
   BadBody,
+  Disconnect,
   SocialAbstract,
   ValidityMedia,
 } from '@gitroom/nestjs-libraries/integrations/social.abstract';
@@ -119,6 +120,13 @@ export class InstagramProvider
         value: "This account doesn't support Trial Reels",
       };
     }
+    if (body.indexOf('2207078') > -1) {
+      return {
+        type: 'bad-body' as const,
+        value:
+          'Instagram Trial Reel publish limit reached for this account, please try again later or publish the post as a regular Reel',
+      };
+    }
 
     if (
       body.indexOf('REVOKED_ACCESS_TOKEN') > -1 ||
@@ -181,7 +189,8 @@ export class InstagramProvider
     if (body.indexOf('2207053') > -1) {
       return {
         type: 'bad-body' as const,
-        value: 'Unknown upload error, please try again',
+        value:
+          "Instagram failed to upload the video. If it exceeds Instagram's limits (300MB, 1920px width, 25Mbps bitrate), export a smaller version and try again",
       };
     }
 
@@ -377,8 +386,17 @@ export class InstagramProvider
     if (body.indexOf('2207082') > -1) {
       return {
         type: 'retry' as const,
-        value: 'Could not upload your media',
-      }
+        value:
+          'Instagram could not process this video. If you attached audio to a video that has no sound track, set the original video volume to 0 and try again',
+      };
+    }
+
+    if (body.indexOf('2207085') > -1) {
+      return {
+        type: 'bad-body' as const,
+        value:
+          'Instagram could not process the video, please check the video format, duration and resolution and try again',
+      };
     }
 
     if (body.indexOf('2207077') > -1) {
@@ -643,11 +661,20 @@ export class InstagramProvider
     ).json();
 
     if (status_code === 'ERROR' || status_code === 'EXPIRED') {
+      const handleError = this.handleErrors(status || '', 200);
+      if (handleError?.type === 'disconnect') {
+        throw new Disconnect(
+          this.identifier,
+          JSON.stringify({ status_code, status }),
+          '{}',
+          handleError?.value
+        );
+      }
       throw new BadBody(
         this.identifier,
         JSON.stringify({ status_code, status }),
         '{}',
-        status || 'Instagram could not process the media'
+        handleError?.value || status || 'Instagram could not process the media'
       );
     }
 
@@ -709,6 +736,10 @@ export class InstagramProvider
           ? firstPost?.media?.length === 1
             ? isStory
               ? `video_url=${m.path}&media_type=STORIES`
+              : m?.thumbnail
+              ? `video_url=${m.path}&media_type=REELS&cover_url=${encodeURIComponent(
+                  m.thumbnail
+                )}`
               : `video_url=${m.path}&media_type=REELS&thumb_offset=${
                   m?.thumbnailTimestamp || 0
                 }`
