@@ -455,7 +455,7 @@ export const MainBillingComponent: FC<{
     [monthlyOrYearly, subscription, user, utm]
   );
   if (user?.isLifetime) {
-    router.replace('/');
+    router.replace(isGeneral ? '/launches' : '/analytics');
     return null;
   }
   if (subscription?.platform && subscription.platform !== 'web') {

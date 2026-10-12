@@ -30,7 +30,7 @@ let recaptchaWidget: {
   resolve?: (token: string | null) => void;
 } | null = null;
 
-const loadRecaptchaToken = async (siteKey: string) => {
+export const loadRecaptchaToken = async (siteKey: string) => {
   if (!(window as any).grecaptcha?.render) {
     await new Promise<void>((resolve, reject) => {
       (window as any).onPreviewRecaptchaLoad = () => resolve();

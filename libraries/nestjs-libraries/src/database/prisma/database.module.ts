@@ -16,6 +16,8 @@ import { MediaService } from '@gitroom/nestjs-libraries/database/prisma/media/me
 import { MediaRepository } from '@gitroom/nestjs-libraries/database/prisma/media/media.repository';
 import { NotificationsRepository } from '@gitroom/nestjs-libraries/database/prisma/notifications/notifications.repository';
 import { EmailService } from '@gitroom/nestjs-libraries/services/email.service';
+import { RecaptchaService } from '@gitroom/nestjs-libraries/services/recaptcha.service';
+import { ContactService } from '@gitroom/nestjs-libraries/services/contact.service';
 import { StripeService } from '@gitroom/nestjs-libraries/services/stripe.service';
 import { PaymentService } from '@gitroom/nestjs-libraries/services/payment/payment.service';
 import { PaymentProviderManager } from '@gitroom/nestjs-libraries/services/payment/payment.provider.manager';
@@ -94,6 +96,8 @@ import { AdminStatsService } from '@gitroom/nestjs-libraries/database/prisma/adm
     ClippingRepository,
     FalService,
     EmailService,
+    RecaptchaService,
+    ContactService,
     TrackService,
     ShortLinkService,
     SetsService,

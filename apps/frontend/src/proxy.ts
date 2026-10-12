@@ -47,7 +47,19 @@ export async function proxy(request: NextRequest) {
     nextUrl.pathname.startsWith('/uploads/') ||
     nextUrl.pathname.startsWith('/p/') ||
     nextUrl.pathname.startsWith('/provider/') ||
-    nextUrl.pathname.startsWith('/icons/')
+    nextUrl.pathname.startsWith('/icons/') ||
+    nextUrl.pathname === '/privacy' ||
+    nextUrl.pathname === '/contact'
+  ) {
+    return topResponse;
+  }
+
+  // Public homepage, logged in users reach it after the org check below
+  if (
+    nextUrl.pathname === '/' &&
+    !authCookie &&
+    !nextUrl.searchParams.get('org') &&
+    !request.cookies.get('org')
   ) {
     return topResponse;
   }
@@ -87,6 +99,7 @@ export async function proxy(request: NextRequest) {
   }
 
   const org = nextUrl.searchParams.get('org');
+  const dashboardUrl = !!process.env.IS_GENERAL ? '/launches' : '/analytics';
   const url = new URL(nextUrl).search;
   if (!nextUrl.pathname.startsWith('/auth') && !authCookie) {
     const providers = ['google', 'settings'];
@@ -105,9 +118,9 @@ export async function proxy(request: NextRequest) {
     );
   }
 
-  // If the url is /auth and the cookie exists, redirect to /
+  // If the url is /auth and the cookie exists, redirect to the dashboard
   if (nextUrl.pathname.startsWith('/auth') && authCookie) {
-    return NextResponse.redirect(new URL(`/${url}`, nextUrl.href));
+    return NextResponse.redirect(new URL(`${dashboardUrl}${url}`, nextUrl.href));
   }
   if (nextUrl.pathname.startsWith('/auth') && !authCookie) {
     if (org) {
@@ -139,7 +152,7 @@ export async function proxy(request: NextRequest) {
         })
       ).json();
       const redirect = NextResponse.redirect(
-        new URL(`/?added=true`, nextUrl.href)
+        new URL(`${dashboardUrl}?added=true`, nextUrl.href)
       );
       if (id) {
         redirect.cookies.set('showorg', id, {
@@ -157,15 +170,6 @@ export async function proxy(request: NextRequest) {
       }
       return redirect;
     }
-    if (nextUrl.pathname === '/') {
-      return NextResponse.redirect(
-        new URL(
-          !!process.env.IS_GENERAL ? '/launches' : `/analytics`,
-          nextUrl.href
-        )
-      );
-    }
-
     return topResponse;
   } catch (err) {
     console.log('err', err);

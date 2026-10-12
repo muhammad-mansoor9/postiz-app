@@ -8,6 +8,7 @@ import {
   Req,
   Res,
   StreamableFile,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { PostsService } from '@gitroom/nestjs-libraries/database/prisma/posts/posts.service';
@@ -28,6 +29,10 @@ import { OnlyURL } from '@gitroom/nestjs-libraries/dtos/webhooks/webhooks.dto';
 import { isSafePublicHttpsUrl } from '@gitroom/nestjs-libraries/dtos/webhooks/webhook.url.validator';
 import { ssrfSafeDispatcher } from '@gitroom/nestjs-libraries/dtos/webhooks/ssrf.safe.dispatcher';
 import { CreatePublicCommentDto } from '@gitroom/nestjs-libraries/dtos/comments/add.comment.dto';
+import { ContactDto } from '@gitroom/nestjs-libraries/dtos/contact/contact.dto';
+import { ContactService } from '@gitroom/nestjs-libraries/services/contact.service';
+import { Throttle } from '@nestjs/throttler';
+import { ThrottlerRealIpGuard } from '@gitroom/nestjs-libraries/throttler/throttler.provider';
 
 const pump = promisify(pipeline);
 
@@ -38,7 +43,8 @@ export class PublicController {
     private _trackService: TrackService,
     private _agentGraphInsertService: AgentGraphInsertService,
     private _postsService: PostsService,
-    private _subscriptionService: SubscriptionService
+    private _subscriptionService: SubscriptionService,
+    private _contactService: ContactService
   ) {}
   @Post('/agent')
   async createAgent(@Body() body: { text: string; apiKey: string }) {
@@ -84,6 +90,14 @@ export class PublicController {
     @RealIP() ip: string
   ) {
     return this._postsService.createPublicComment(postId, body, null, ip);
+  }
+
+  // public and sends an email per call, so cap it per client
+  @UseGuards(ThrottlerRealIpGuard)
+  @Throttle({ default: { limit: 5, ttl: 3600000 } })
+  @Post('/contact')
+  async contact(@Body() body: ContactDto, @RealIP() ip: string) {
+    return this._contactService.sendMessage(body, ip);
   }
 
   @Post('/t')

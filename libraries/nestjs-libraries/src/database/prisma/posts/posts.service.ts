@@ -47,6 +47,7 @@ import { AnalyticsData } from '@gitroom/nestjs-libraries/integrations/social/soc
 import { timer } from '@gitroom/helpers/utils/timer';
 import { ioRedis } from '@gitroom/nestjs-libraries/redis/redis.service';
 import { RefreshToken } from '@gitroom/nestjs-libraries/integrations/social.abstract';
+import { RecaptchaService } from '@gitroom/nestjs-libraries/services/recaptcha.service';
 import { RefreshIntegrationService } from '@gitroom/nestjs-libraries/integrations/refresh.integration.service';
 import { hasExtension } from '@gitroom/helpers/utils/has.extension';
 import { stripLinks } from '@gitroom/helpers/utils/strip.links';
@@ -73,7 +74,8 @@ export class PostsService {
     private _shortLinkService: ShortLinkService,
     private _openaiService: OpenaiService,
     private _temporalService: TemporalService,
-    private _refreshIntegrationService: RefreshIntegrationService
+    private _refreshIntegrationService: RefreshIntegrationService,
+    private _recaptchaService: RecaptchaService
   ) {}
 
   searchForMissingThreeHoursPosts() {
@@ -1405,7 +1407,7 @@ export class PostsService {
       if (!body.displayName?.trim()) {
         throw new BadRequestException('Name is required');
       }
-      await this.verifyRecaptcha(body.recaptchaToken, ip);
+      await this._recaptchaService.verify(body.recaptchaToken, ip);
     }
 
     const hasStart = typeof body.anchorStart === 'number';
@@ -1459,32 +1461,6 @@ export class PostsService {
         anchorQuote: hasStart ? body.anchorQuote : undefined,
       }
     );
-  }
-
-  private async verifyRecaptcha(token: string | undefined, ip: string) {
-    if (!process.env.RECAPTCHA_SECRET_KEY) {
-      return;
-    }
-
-    if (!token) {
-      throw new BadRequestException('Captcha verification failed');
-    }
-
-    const result = await (
-      await fetch('https://www.google.com/recaptcha/api/siteverify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          secret: process.env.RECAPTCHA_SECRET_KEY,
-          response: token,
-          remoteip: ip,
-        }),
-      })
-    ).json();
-
-    if (!result?.success) {
-      throw new BadRequestException('Captcha verification failed');
-    }
   }
 
   async resolveComment(orgId: string, commentId: string, resolved: boolean) {
