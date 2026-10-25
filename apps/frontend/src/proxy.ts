@@ -48,9 +48,11 @@ export async function proxy(request: NextRequest) {
     nextUrl.pathname.startsWith('/p/') ||
     nextUrl.pathname.startsWith('/provider/') ||
     nextUrl.pathname.startsWith('/icons/') ||
-<<<<<<< HEAD
     nextUrl.pathname === '/privacy' ||
-    nextUrl.pathname === '/contact'
+    nextUrl.pathname === '/contact' ||
+    // the consent screen of MCP / OAuth clients handles signed-out visitors
+    // itself (sign in and come back, or connect a self-hosted instance)
+    nextUrl.pathname.startsWith('/oauth/authorize')
   ) {
     return topResponse;
   }
@@ -61,11 +63,6 @@ export async function proxy(request: NextRequest) {
     !authCookie &&
     !nextUrl.searchParams.get('org') &&
     !request.cookies.get('org')
-=======
-    // the consent screen of MCP / OAuth clients handles signed-out visitors
-    // itself (sign in and come back, or connect a self-hosted instance)
-    nextUrl.pathname.startsWith('/oauth/authorize')
->>>>>>> upstream/main
   ) {
     return topResponse;
   }
@@ -141,7 +138,7 @@ export async function proxy(request: NextRequest) {
               domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
             }
           : {}),
-        expires: new Date(Date.now() + 15 * 60 * 1000),
+        expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
       });
       return redirect;
     }
@@ -171,7 +168,7 @@ export async function proxy(request: NextRequest) {
                 domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
               }
             : {}),
-          expires: new Date(Date.now() + 15 * 60 * 1000),
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
         });
       }
       return redirect;
