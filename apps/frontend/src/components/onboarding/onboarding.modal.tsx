@@ -441,7 +441,7 @@ const OnboardingStep2: FC<{ onBack: () => void; onNext: () => void }> = ({
           {isSelfHosted
             ? t(
                 'connector_self_hosted_description',
-                'The official connector works with self-hosted Postiz too. When asked to sign in, choose "Use self-hosted" and enter {{url}} with your API key.',
+                'The official connector works with self-hosted Creators Studio too. When asked to sign in, choose "Use self-hosted" and enter {{url}} with your API key.',
                 { url: mcpBase, interpolation: { escapeValue: false } }
               )
             : t(

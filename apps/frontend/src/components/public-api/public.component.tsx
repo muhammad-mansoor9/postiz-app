@@ -424,12 +424,12 @@ const McpSection = ({
               {isSelfHosted
                 ? t(
                     'connector_self_hosted_description',
-                    'The official connector works with self-hosted Postiz too. When asked to sign in, choose "Use self-hosted" and enter {{url}} with your API key.',
+                    'The official connector works with self-hosted Creators Studio too. When asked to sign in, choose "Use self-hosted" and enter {{url}} with your API key.',
                     { url: mcpBase, interpolation: { escapeValue: false } }
                   )
                 : t(
                     'connector_onboarding_description',
-                    'The fastest way: add Postiz with one click, you will be asked to sign in'
+                    'The fastest way: add Creators Studio with one click, you will be asked to sign in'
                   )}
             </div>
             <div className="flex flex-wrap gap-[8px]">

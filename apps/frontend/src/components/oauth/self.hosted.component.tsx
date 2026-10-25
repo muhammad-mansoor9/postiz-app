@@ -79,7 +79,7 @@ export const OAuthSelfHosted: FC<{
       <div className="flex flex-col gap-[4px]">
         <div className="text-[16px] font-semibold">Use self-hosted</div>
         <div className="text-[14px] text-gray-400">
-          {appName} will work with your own Postiz instance. Postiz Cloud
+          {appName} will work with your own Creators Studio instance. Creators Studio Cloud
           relays its requests, and your API key is stored encrypted.
         </div>
       </div>

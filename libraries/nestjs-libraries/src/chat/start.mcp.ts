@@ -178,13 +178,13 @@ export const startMcp = async (app: INestApplication) => {
   if (selfHostedRelayEnabled()) {
     const selfHostedTools = mcpRelayService.tools(agentTools);
     selfHostedServer = new MCPServer({
-      name: 'Postiz MCP',
+      name: 'Creators Studio MCP',
       version: '1.0.0',
       protocolVersion: '2026-07-28',
       tools: selfHostedTools,
     });
     claudeSelfHostedServer = new MCPServer({
-      name: 'Postiz MCP',
+      name: 'Creators Studio MCP',
       version: '1.0.0',
       protocolVersion: '2026-07-28',
       tools: withoutClaudeHidden(selfHostedTools),
