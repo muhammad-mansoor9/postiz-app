@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 // Operator details shown on the page
 const COMPANY_NAME = 'InferenceCore';
 const CONTACT_EMAIL = 'contact@inferencecore.co';
-const LAST_UPDATED = 'September 30, 2026';
+const LAST_UPDATED = 'October 25, 2026';
 
 const Section = ({ title, children }: { title: string; children: ReactNode }) => (
   <section className="flex flex-col gap-[12px]">
@@ -25,6 +25,21 @@ const Mail = () => (
   <a className="underline" href={`mailto:${CONTACT_EMAIL}`}>
     {CONTACT_EMAIL}
   </a>
+);
+
+const Link = ({ href, children }: { href: string; children: ReactNode }) => (
+  <a
+    className="underline break-words"
+    href={href}
+    target="_blank"
+    rel="noreferrer"
+  >
+    {children}
+  </a>
+);
+
+const List = ({ children }: { children: ReactNode }) => (
+  <ul className="list-disc ps-[20px] flex flex-col gap-[4px]">{children}</ul>
 );
 
 export default function PrivacyPage() {
@@ -79,7 +94,7 @@ export default function PrivacyPage() {
       </Section>
 
       <Section title="3. How We Use the Data">
-        <ul className="list-disc ps-[20px] flex flex-col gap-[4px]">
+        <List>
           <li>
             To provide the Service: authenticate you, store your content,
             publish it to the platforms you connect at the time you schedule,
@@ -90,61 +105,238 @@ export default function PrivacyPage() {
             To send service messages, such as failed-post and account
             notifications.
           </li>
-        </ul>
+        </List>
         <p>
           We do not sell your data and we do not use your content or connected
           platform data for advertising.
         </p>
       </Section>
 
-      <Section title="4. YouTube and Google Data">
+      <Section title="4. Google User Data We Access">
         <p>
-          The Service uses YouTube API Services. By connecting a YouTube
-          channel you agree to the{' '}
-          <a
-            className="underline"
-            href="https://www.youtube.com/t/terms"
-            target="_blank"
-            rel="noreferrer"
-          >
+          Sections 4 to 9 describe how we handle data received from Google
+          APIs (&quot;Google user data&quot;). We only access it when you sign
+          in with Google or connect a YouTube channel, and only with the
+          permissions you approve on Google&apos;s consent screen. The Service
+          uses YouTube API Services: by connecting a YouTube channel you agree
+          to the{' '}
+          <Link href="https://www.youtube.com/t/terms">
             YouTube Terms of Service
-          </a>{' '}
-          and the{' '}
-          <a
-            className="underline"
-            href="https://policies.google.com/privacy"
-            target="_blank"
-            rel="noreferrer"
-          >
+          </Link>
+          , and Google&apos;s own handling of your data is described in the{' '}
+          <Link href="https://policies.google.com/privacy">
             Google Privacy Policy
-          </a>
-          . You can revoke the Service&apos;s access to your Google data at any
-          time at{' '}
-          <a
-            className="underline"
-            href="https://security.google.com/settings/security/permissions"
-            target="_blank"
-            rel="noreferrer"
-          >
-            https://security.google.com/settings/security/permissions
-          </a>
+          </Link>
           .
         </p>
         <p>
-          Our use of information received from Google APIs adheres to the{' '}
-          <a
-            className="underline"
-            href="https://developers.google.com/terms/api-services-user-data-policy"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Google API Services User Data Policy
-          </a>
-          , including the Limited Use requirements.
+          <strong>Sign in with Google</strong> - we receive your Google account
+          ID, email address and basic profile. We keep only your Google account
+          ID and email address, to create and identify your account.
+        </p>
+        <p>
+          <strong>Connecting a YouTube channel</strong> - with your permission
+          we access:
+        </p>
+        <List>
+          <li>
+            <strong>Basic Google profile</strong> - your Google account ID,
+            name and profile picture, to identify the account you connect.
+          </li>
+          <li>
+            <strong>YouTube channel information (read-only)</strong> - the
+            channels you manage (ID, title, handle, profile image and subscriber
+            count), and the views, likes, comments and favourites of videos you
+            published through the Service.
+          </li>
+          <li>
+            <strong>YouTube video upload</strong> - to upload the videos you
+            schedule, with the title, description, tags, privacy setting,
+            audience setting and thumbnail you choose.
+          </li>
+          <li>
+            <strong>YouTube Analytics (read-only)</strong> - daily channel
+            metrics such as views, watch time, average view duration, likes and
+            subscribers gained or lost.
+          </li>
+        </List>
+        <p>
+          Google also issues us an access token and a refresh token so the
+          Service can perform these actions for you.
+        </p>
+        <p>
+          <strong>What we store</strong> - the access and refresh tokens, the
+          channel ID, title, handle and profile image, and the YouTube link of
+          each video you publish through the Service. Subscriber counts and
+          analytics are not stored; analytics are fetched when you view them
+          and cached for up to one hour.
+        </p>
+        <p>
+          We do not read your other videos, comments, playlists or
+          subscriptions, and we do not change or delete existing content on
+          your channel.
         </p>
       </Section>
 
-      <Section title="5. AI Features">
+      <Section title="5. How We Use Google User Data">
+        <p>We use Google user data only to:</p>
+        <List>
+          <li>sign you in and identify your account;</li>
+          <li>
+            let you choose which YouTube channel to connect and show its name
+            and picture in the Service;
+          </li>
+          <li>upload the videos you schedule, at the time you choose;</li>
+          <li>show channel and video analytics when you request them;</li>
+          <li>
+            keep your connection active and tell you when a channel needs to be
+            reconnected.
+          </li>
+        </List>
+        <p>
+          Our use and transfer of information received from Google APIs adheres
+          to the{' '}
+          <Link href="https://developers.google.com/terms/api-services-user-data-policy">
+            Google API Services User Data Policy
+          </Link>
+          , including the Limited Use requirements. We do not sell Google user
+          data, use it for advertising, use it to assess credit-worthiness, or
+          use it (or allow others to use it) to develop, improve or train
+          generalised artificial intelligence or machine learning models.
+        </p>
+      </Section>
+
+      <Section title="6. How We Share Google User Data">
+        <p>We share Google user data only with:</p>
+        <List>
+          <li>
+            <strong>YouTube</strong> - the videos and details you schedule are
+            sent to YouTube for publishing.
+          </li>
+          <li>
+            <strong>Your workspace</strong> - members you invite can see the
+            connected channel, post to it and view its analytics, according to
+            their role.
+          </li>
+          <li>
+            <strong>Tools you authorise</strong> - if you create an API key or
+            connect an external tool to the Service, it can list your channels,
+            schedule posts and read analytics at your direction.
+          </li>
+          <li>
+            <strong>Service providers</strong> - companies that host our
+            servers, database, file storage, background processing and error
+            monitoring, which process data on our behalf only to run the
+            Service.
+          </li>
+          <li>
+            <strong>AI provider</strong> - if you use the optional AI assistant,
+            the names and pictures of your connected channels are sent to our AI
+            provider (OpenAI) to answer your request. Your Google tokens and
+            YouTube analytics are not sent.
+          </li>
+          <li>
+            <strong>Legal requirements</strong> - when required by law or to
+            protect the security of the Service and its users.
+          </li>
+        </List>
+        <p>
+          We never share Google user data with advertisers, data brokers or
+          information resellers.
+        </p>
+      </Section>
+
+      <Section title="7. How We Protect Google User Data">
+        <List>
+          <li>
+            All data exchanged with Google, and between your browser and the
+            Service, is encrypted in transit using HTTPS (TLS).
+          </li>
+          <li>
+            Access and refresh tokens are kept on our servers, used only to
+            communicate with Google on your behalf, and never displayed in the
+            Service.
+          </li>
+          <li>
+            Access to the Service requires signing in, and channel data is only
+            available to members of the workspace that connected it, according
+            to their permissions.
+          </li>
+          <li>
+            Our Google credentials and other secrets are kept in server
+            configuration, separate from our source code.
+          </li>
+          <li>
+            Google sign-in and channel connection use OAuth 2.0, so we never see
+            your Google password.
+          </li>
+        </List>
+        <p>
+          No system is fully secure and we cannot guarantee absolute security.
+        </p>
+      </Section>
+
+      <Section title="8. Retention and Deletion of Google User Data">
+        <List>
+          <li>
+            Tokens and channel details are kept while the channel is connected
+            to your workspace.
+          </li>
+          <li>Analytics are cached for up to one hour and not stored.</li>
+          <li>
+            Links to published videos are kept with your post history.
+          </li>
+          <li>
+            Your Google account ID and email are kept while your account exists.
+          </li>
+        </List>
+        <p>
+          <strong>Removing a channel</strong> - the Service immediately stops
+          using the channel and its tokens.
+        </p>
+        <p>
+          <strong>Revoking access in your Google Account</strong> - the Service
+          can no longer access your Google data, and the channel is shown as
+          disconnected. Revoking access at Google stops future access; to also
+          delete the data we already hold, delete your account or contact us.
+        </p>
+        <p>
+          <strong>Deleting your account</strong> - the tokens, channel details
+          and Google account details of the workspaces you own are deleted or
+          irreversibly anonymised, so they can no longer be used or linked to
+          you.
+        </p>
+        <p>
+          You can also ask us to delete your Google user data at any time by
+          emailing <Mail />.
+        </p>
+      </Section>
+
+      <Section title="9. Your Choices and Contact">
+        <List>
+          <li>
+            <strong>Revoke access</strong> at any time at{' '}
+            <Link href="https://myaccount.google.com/connections">
+              https://myaccount.google.com/connections
+            </Link>
+            .
+          </li>
+          <li>
+            <strong>Remove a channel</strong> from your workspace in the
+            Service.
+          </li>
+          <li>
+            <strong>Delete your account</strong> from your settings in the
+            Service.
+          </li>
+          <li>
+            <strong>Request deletion</strong> of the Google user data we hold
+            by emailing <Mail /> from your account email address.
+          </li>
+        </List>
+      </Section>
+
+      <Section title="10. AI Features">
         <p>
           If you use the optional AI features (for example caption or image
           generation), the prompts and inputs you choose to include are sent to
@@ -153,8 +345,8 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="6. Who We Share Data With">
-        <ul className="list-disc ps-[20px] flex flex-col gap-[4px]">
+      <Section title="11. Who We Share Data With">
+        <List>
           <li>
             The platforms you connect - your content is sent to the platform
             you choose to publish on, and analytics are received from it.
@@ -168,31 +360,31 @@ export default function PrivacyPage() {
             permissions.
           </li>
           <li>Authorities, when we are legally required to.</li>
-        </ul>
+        </List>
       </Section>
 
-      <Section title="7. Data Retention and Deletion">
-        <ul className="list-disc ps-[20px] flex flex-col gap-[4px]">
+      <Section title="12. Data Retention and Deletion">
+        <List>
           <li>
-            Account data is kept while your account is active and deleted after
-            the account is closed.
+            Account data is kept while your account is active and deleted or
+            anonymised when you delete your account.
           </li>
           <li>
-            OAuth tokens are kept while the channel is connected and deleted
-            when you disconnect it from the Service.
+            OAuth tokens are kept while the channel is connected and are
+            deleted or anonymised when you delete your account, or on request.
           </li>
           <li>
             Scheduled content is kept until it is published or you delete it.
           </li>
-        </ul>
+        </List>
         <p>
-          To delete your data, disconnect the channel or delete your account in
-          the Service, or email <Mail /> with the account you want deleted and
-          we will delete the associated data.
+          To delete your data, remove the channel or delete your account in the
+          Service, or email <Mail /> with the account you want deleted and we
+          will delete the associated data.
         </p>
       </Section>
 
-      <Section title="8. Security">
+      <Section title="13. Security">
         <p>
           We use encryption in transit (TLS), access controls and other
           safeguards to protect your data. No system is fully secure and we
@@ -200,7 +392,7 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="9. Your Rights">
+      <Section title="14. Your Rights">
         <p>
           Depending on where you live, you may have the right to access,
           correct, delete or export your personal data, and to object to or
@@ -208,7 +400,7 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="10. Children">
+      <Section title="15. Children">
         <p>
           The Service is intended for business use and is not directed to
           children under 18. If you believe a child has provided us with
@@ -216,10 +408,12 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section title="11. Changes to This Policy">
+      <Section title="16. Changes to This Policy">
         <p>
           We may update this Policy from time to time. The &quot;Last
-          updated&quot; date above shows when it last changed.
+          updated&quot; date above shows when it last changed. We will update
+          this Policy before any change to how we use Google user data takes
+          effect.
         </p>
       </Section>
     </div>
