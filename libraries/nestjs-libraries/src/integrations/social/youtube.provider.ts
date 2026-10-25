@@ -64,12 +64,8 @@ export class YoutubeProvider extends SocialAbstract implements SocialProvider {
   dto = YoutubeSettingsDto;
   scopes = [
     'https://www.googleapis.com/auth/userinfo.profile',
-    'https://www.googleapis.com/auth/userinfo.email',
-    'https://www.googleapis.com/auth/youtube',
-    'https://www.googleapis.com/auth/youtube.force-ssl',
     'https://www.googleapis.com/auth/youtube.readonly',
     'https://www.googleapis.com/auth/youtube.upload',
-    'https://www.googleapis.com/auth/youtubepartner',
     'https://www.googleapis.com/auth/yt-analytics.readonly',
   ];
 
@@ -276,7 +272,7 @@ export class YoutubeProvider extends SocialAbstract implements SocialProvider {
     }`;
 
     if (text.includes('invalid_rapt')) {
-      return `because your organization's Google Workspace session policy invalidated its access. Ask your Google Workspace admin to mark Postiz as a trusted app and turn on "Exempt trusted apps" (https://support.google.com/a/answer/9368756) to prevent this from happening again`;
+      return `because your organization's Google Workspace session policy invalidated its access. Ask your Google Workspace admin to mark Creators Studio as a trusted app and turn on "Exempt trusted apps" (https://support.google.com/a/answer/9368756) to prevent this from happening again`;
     }
 
     return undefined;
