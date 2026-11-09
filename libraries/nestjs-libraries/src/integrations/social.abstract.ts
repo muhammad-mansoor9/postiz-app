@@ -39,6 +39,7 @@ export const stripQuery = (url: string) => {
 export type ValidityMedia = {
   path: string;
   thumbnail?: string;
+  alt?: string;
 };
 
 // Temporal serializes the whole ApplicationFailure (message + details) into the
@@ -120,6 +121,18 @@ export class PublishedWithError extends ApplicationFailure {
       [{ identifier, postDbId, releaseId, releaseURL }]
     );
   }
+}
+
+export function rangeReadFailure(response: {
+  status: number;
+  statusText: string;
+  ok: boolean;
+}) {
+  return JSON.stringify({
+    status: response.status,
+    statusText: response.statusText,
+    ok: response.ok,
+  });
 }
 
 export class BadBody extends ApplicationFailure {
@@ -399,9 +412,10 @@ export abstract class SocialAbstract {
         // response.body here would silently load the whole file into memory and
         // upload corrupted chunks.
         if (response.status !== 206) {
+          await response.body?.cancel().catch(() => {});
           throw new BadBody(
             identifier,
-            '{}',
+            rangeReadFailure(response),
             Buffer.from('{}'),
             `Media server did not honor the range request (status ${response.status})`
           );
@@ -553,6 +567,15 @@ export abstract class SocialAbstract {
     try {
       value = await func();
     } catch (err) {
+      // Already classified by the provider (e.g. mediaSize/mediaChunk): keep
+      // its message instead of re-wrapping it as 'Unknown Error'.
+      if (
+        err instanceof BadBody ||
+        err instanceof RefreshToken ||
+        err instanceof Disconnect
+      ) {
+        throw err;
+      }
       const handle = this.handleErrors(safeStringify(err), 200);
       value = { err: true, value: 'Unknown Error', ...(handle || {}) };
       globalErr = err;
